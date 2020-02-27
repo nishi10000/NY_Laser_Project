@@ -37,7 +37,9 @@ const int chipSelect = BUILTIN_SDCARD;
 #define lazer_off_message "lazer_off,"
 #define frame_start_message "frame_start,"
 #define frame_end_message "frame_end,"
-
+#define lazer_output 2//pwmpin
+#define lazer_on 255
+#define lazer_off 0
 
 String str;
 String buff;
@@ -46,10 +48,13 @@ int datacount=0;//x,yを分けるカウンター
 int x_val=0;//読み取ったｘとｙの値を格納する。
 int y_val=0;
 
+
+
 elapsedMicros usec = 0;
 
 void setup()
 {
+  
   analogWriteResolution(12);
  // Open serial communications and wait for port to open:
   Serial.begin(9600);
@@ -98,11 +103,13 @@ void loop()
             buff="";
           }else
           if(buff.equals(lazer_off_message)){
-            //Serial.println("LAZER_OFF");          
+            //Serial.println("LAZER_OFF");  
+            analogWrite(lazer_output,lazer_off);        
             buff="";
           }else
           if(buff.equals(lazer_on_message)){
-            //Serial.println("LAZER_ON");          
+            //Serial.println("LAZER_ON");
+            analogWrite(lazer_output,lazer_on);          
             buff="";
           }else
           if(buff.equals(frame_start_message)){
