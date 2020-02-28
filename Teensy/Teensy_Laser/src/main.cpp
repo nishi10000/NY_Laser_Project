@@ -52,6 +52,8 @@ int y_val=0;
 
 elapsedMicros usec = 0;
 
+//TODO:1フレームの間は同じフレームをループさせる。
+
 void setup()
 {
   
