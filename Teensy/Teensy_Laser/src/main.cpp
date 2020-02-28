@@ -40,6 +40,8 @@ const int chipSelect = BUILTIN_SDCARD;
 #define lazer_output 2//pwmpin
 #define lazer_on 255
 #define lazer_off 0
+#define flame_time 30//30ms
+
 
 String str;
 String buff;
@@ -77,6 +79,7 @@ void setup()
 
 void loop()
 {
+  int counttime=0;
 	// nothing happens after setup
    myFile = SD.open(file_name, FILE_WRITE);
   // re-open the file for reading:
@@ -99,8 +102,12 @@ void loop()
         buff += str;
         
         if(str==','){
-
+          /*構想
+          ：framestartの場所を記憶してflame時間分経過していなければ、ループさせる。
+          */
+          counttime=millis();
           if(buff.equals(frame_start_message)){
+            int flame_start_pos=myFile.position();//2.28追記//
             //Serial.println("FRAME_START");          
             buff="";
           }else
@@ -119,6 +126,9 @@ void loop()
             buff="";          
           }else
           if(buff.equals(frame_end_message)){
+            if(flame_time<counttime){//
+
+            }
             //Serial.println("FRAME_END");
             buff="";          
           }else{
