@@ -20,7 +20,7 @@
  
 #include <SD.h>
 #include <SPI.h>
-
+#include <MsTimer2.h>
 File myFile;
 // change this to match your SD shield or module;
 // Arduino Ethernet shield: pin 4
@@ -50,11 +50,14 @@ int datacount=0;//x,yを分けるカウンター
 int x_val=0;//読み取ったｘとｙの値を格納する。
 int y_val=0;
 
-
+bool flame_end=false;//flameが終わったときに、フレームが終わったときtrueになる。
 
 elapsedMicros usec = 0;
 
 //TODO:1フレームの間は同じフレームをループさせる。
+void flame_timer(){
+  flame_end=true;
+}
 
 void setup()
 {
@@ -72,14 +75,14 @@ void setup()
   }
   //Serial.println("initialization done.");
     // open the file. 
- 
-
-
+  MsTimer2::set(30, flame_timer); // 500ms period
+  MsTimer2::start();
 }
+
 
 void loop()
 {
-  int counttime=0;
+  int flame_start_pos=0;
 	// nothing happens after setup
    myFile = SD.open(file_name, FILE_WRITE);
   // re-open the file for reading:
@@ -94,72 +97,75 @@ void loop()
     int count=0;
     while (myFile.available()) {
       
-        str = char(myFile.read());//1biteずつ格納される。
-        count++;
-        //Serial.print("count=");
-        //Serial.println(count);
+      str = char(myFile.read());//1biteずつ格納される。
+      count++;
+      //Serial.print("count=");
+      //Serial.println(count);
+      
+      buff += str;
+      
+      if(str==','){
+        /*構想
+        ：framestartの場所を記憶してflame時間分経過していなければ、ループさせる。
+        */
         
-        buff += str;
-        
-        if(str==','){
-          /*構想
-          ：framestartの場所を記憶してflame時間分経過していなければ、ループさせる。
-          */
-          counttime=millis();
-          if(buff.equals(frame_start_message)){
-            int flame_start_pos=myFile.position();//2.28追記//
-            //Serial.println("FRAME_START");          
-            buff="";
-          }else
-          if(buff.equals(lazer_off_message)){
-            //Serial.println("LAZER_OFF");  
-            analogWrite(lazer_output,lazer_off);        
-            buff="";
-          }else
-          if(buff.equals(lazer_on_message)){
-            //Serial.println("LAZER_ON");
-            analogWrite(lazer_output,lazer_on);          
-            buff="";
-          }else
-          if(buff.equals(frame_start_message)){
-            //Serial.println("FRAME_START");
-            buff="";          
-          }else
-          if(buff.equals(frame_end_message)){
-            if(flame_time<counttime){//
-
-            }
-            //Serial.println("FRAME_END");
-            buff="";          
+        if(buff.equals(frame_start_message)){
+          flame_start_pos=myFile.position();//2.28追記//
+          //Serial.println("FRAME_START");          
+          buff="";
+        }else
+        if(buff.equals(lazer_off_message)){
+          Serial.println("LAZER_OFF");  
+          analogWrite(lazer_output,lazer_off);        
+          buff="";
+        }else
+        if(buff.equals(lazer_on_message)){
+          Serial.println("LAZER_ON");
+          analogWrite(lazer_output,lazer_on);          
+          buff="";
+        }else
+        if(buff.equals(frame_start_message)){
+          Serial.println("FRAME_START");
+          buff="";          
+        }else
+        if(buff.equals(frame_end_message)){
+          if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせ再生させる。
+            Serial.print("flase_repeat");
+            myFile.seek(flame_start_pos);
           }else{
-            //Serial.print("buff=");
-            //Serial.println(buff);
-            buff=buff.trim();
-            
-            buff.remove(buff.indexOf(","), 1);
-            //Serial.println(buff);
-            int val = buff.toInt();
-            //Serial.println(val);
-            if(datacount==0){
-              datacount++;
-              x_val=val;
-            }else{
-              datacount=0;
-              y_val=val;
-            }
-            //Serial.print("x_val:");
-            //Serial.println(x_val);
-            //Serial.print("y_val:");
-            //Serial.println(y_val);
-            analogWrite(A21, map(x_val,0,640,0,4095));
-            analogWrite(A22, map(y_val,0,640,0,4095));
-            //Serial.print("map_y_val:");
-            Serial.println(map(y_val,0,640,0,4095));
-            while (usec < 3) ; // wait
-            usec = usec - 3;
-            buff="";
+            flame_end=false;
           }
+          //Serial.println("FRAME_END");
+          buff="";          
+        }else{
+          //Serial.print("buff=");
+          //Serial.println(buff);
+          buff=buff.trim();
+          
+          buff.remove(buff.indexOf(","), 1);
+          //Serial.println(buff);
+          int val = buff.toInt();
+          //Serial.println(val);
+          if(datacount==0){
+            datacount++;
+            x_val=val;
+          }else{
+            datacount=0;
+            y_val=val;
+          }
+          //Serial.print("x_val:");
+          //Serial.println(x_val);
+          //Serial.print("y_val:");
+          //Serial.println(y_val);
+          analogWrite(A21, map(x_val,0,640,0,4095));
+          analogWrite(A22, map(y_val,0,640,0,4095));
+          //Serial.print("map_y_val:");
+          Serial.println(map(y_val,0,640,0,4095));
+          while (usec < 3) ; // wait
+          usec = usec - 3;
+          buff="";
         }
+      }
       
     }
     // close the file:
