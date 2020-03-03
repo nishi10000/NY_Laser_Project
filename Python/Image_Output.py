@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+#テスト用画像を生成するソース。
 
 # Create a black image
 img = np.zeros((512,512,3), np.uint8)
