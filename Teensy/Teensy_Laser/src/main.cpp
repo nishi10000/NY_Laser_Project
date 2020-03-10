@@ -56,7 +56,9 @@ elapsedMicros wait_time = 0;
 
 //TODO:1フレームの間は同じフレームをループさせる。
 void flame_timer(){
-  flame_end=true;
+  if(flame_end!=true){
+    flame_end=true;
+  }
 }
 
 void setup()
@@ -75,7 +77,7 @@ void setup()
   }
   Serial.println("initialization done.");
     // open the file. 
-  MsTimer2::set(30, flame_timer); // 500ms period
+  MsTimer2::set(30, flame_timer); //30fps...15だったら60fps
   MsTimer2::start();
 }
 
@@ -134,7 +136,7 @@ void loop()
           //buff="";          
         }else
         if(buff.equals(frame_end_message)){
-          if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせ再生させる。
+          if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせる。
             Serial.print("flase_repeat");
             myFile.seek(flame_start_pos);
           }else{
