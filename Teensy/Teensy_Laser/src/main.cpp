@@ -46,13 +46,13 @@ const int chipSelect = BUILTIN_SDCARD;
 String str;
 String buff;
 
-int datacount=0;//x,yを分けるカウンター
+int x_val_count=0;//x,yを分けるカウンター
 int x_val=0;//読み取ったｘとｙの値を格納する。
 int y_val=0;
 
 bool flame_end=false;//flameが終わったときに、フレームが終わったときtrueになる。
 
-elapsedMicros usec = 0;
+elapsedMicros wait_time = 0;
 
 //TODO:1フレームの間は同じフレームをループさせる。
 void flame_timer(){
@@ -68,12 +68,12 @@ void setup()
    while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
-  //Serial.print("Initializing SD card...");
+  Serial.print("Initializing SD card...");
   if (!SD.begin(chipSelect)) {
-    //Serial.println("initialization failed!");
+    Serial.println("initialization failed!");
     return;
   }
-  //Serial.println("initialization done.");
+  Serial.println("initialization done.");
     // open the file. 
   MsTimer2::set(30, flame_timer); // 500ms period
   MsTimer2::start();
@@ -90,7 +90,12 @@ void loop()
   buff="";
 
   myFile = SD.open(file_name);
-  if (myFile) {
+  if(!myFile){
+    Serial.println("Can not open file!");
+    return;
+  }
+  
+  //if (myFile) {
     //Serial.println(file_name);
     //Serial.println("start_file_read");
     // read from the file until there's nothing else in it:
@@ -112,21 +117,21 @@ void loop()
         if(buff.equals(frame_start_message)){
           flame_start_pos=myFile.position();//2.28追記//
           //Serial.println("FRAME_START");          
-          buff="";
+          //buff="";
         }else
         if(buff.equals(lazer_off_message)){
           Serial.println("LAZER_OFF");  
           analogWrite(lazer_output,lazer_off);        
-          buff="";
+          //buff="";
         }else
         if(buff.equals(lazer_on_message)){
           Serial.println("LAZER_ON");
           analogWrite(lazer_output,lazer_on);          
-          buff="";
+          //buff="";
         }else
         if(buff.equals(frame_start_message)){
           Serial.println("FRAME_START");
-          buff="";          
+          //buff="";          
         }else
         if(buff.equals(frame_end_message)){
           if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせ再生させる。
@@ -136,7 +141,7 @@ void loop()
             flame_end=false;
           }
           //Serial.println("FRAME_END");
-          buff="";          
+          //buff="";          
         }else{
           //Serial.print("buff=");
           //Serial.println(buff);
@@ -146,11 +151,11 @@ void loop()
           //Serial.println(buff);
           int val = buff.toInt();
           //Serial.println(val);
-          if(datacount==0){
-            datacount++;
+          if(x_val_count==0){
+            x_val_count++;
             x_val=val;
           }else{
-            datacount=0;
+            x_val_count=0;
             y_val=val;
           }
           //Serial.print("x_val:");
@@ -161,17 +166,18 @@ void loop()
           analogWrite(A22, map(y_val,0,640,0,4095));
           //Serial.print("map_y_val:");
           Serial.println(map(y_val,0,640,0,4095));
-          while (usec < 3) ; // wait
-          usec = usec - 3;
-          buff="";
+          while (wait_time < 3) ; // wait
+          wait_time = wait_time - 3;
+          //buff="";
         }
+        buff="";
       }
       
     }
     // close the file:
     myFile.close();
-  } else {
+  //} else {
   	// if the file didn't open, print an error:
     //Serial.println("error opening test.txt");
-  }
+  //}
 }
