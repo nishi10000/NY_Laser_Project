@@ -1,5 +1,5 @@
 '''
-Image_Outputで出力したファイルをtxtファイルに変換
+.jpg->.txtへ変換。Image_Outputで出力したファイルをtxtファイルに変換
 '''
 
 import numpy as np
@@ -21,6 +21,10 @@ lazer_on_message='lazer_on,'
 lazer_off_message='lazer_off,'
 frame_start_message='frame_start,'
 frame_end_message='frame_end,'
+
+#画像取り込み後の最大サイズ。
+Image_Scale_X=480
+Image_Scale_Y=480
 
 # アスペクト比を固定して、指定した解像度にリサイズする。
 def scale_to_resolation(img, resolation):
@@ -45,7 +49,7 @@ except cv2.error:
 send_message=''
 
 
-scaled_img=scale_box(img,640,480)
+scaled_img=scale_box(img,Image_Scale_X,Image_Scale_Y)
 #黒い画像をscaled_img後のスケールで作成する
 black_img = np.zeros((scaled_img.shape[0],scaled_img.shape[1],3), np.uint8)
 print(scaled_img.shape)
