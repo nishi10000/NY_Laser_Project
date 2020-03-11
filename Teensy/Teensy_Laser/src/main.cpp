@@ -14,7 +14,7 @@
 #include <MsTimer2.h>
 File myFile;
 const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCARD
-#define file_name "MOVE_T~1.txt"//img_test.txt
+#define file_name "movie_test.txt"//img_test.txt
 #define lazer_on_message "lazer_on,"
 #define lazer_off_message "lazer_off,"
 #define frame_start_message "frame_start,"
@@ -97,12 +97,12 @@ void loop()
 	myFile = SD.open(file_name, FILE_READ);
   str="";//str初期化
   buff="";
-  //Serial.println(file_name);
-  //myFile = SD.open(file_name);
-  //Serial.println(myFile);
   int count=0;
   if(!myFile){
-    //Serial.println("Can not open file!");
+    Serial.println("Can not open file!");//もしもSDカードが読み込めなかった場合は、SDカードのディレクトリを確認する。
+    root = SD.open("/");
+    printDirectory(root,0);
+    Serial.println("done!");
     return;
   }
   while (myFile.available()) {
