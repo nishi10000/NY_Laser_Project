@@ -24,6 +24,8 @@ const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCA
 #define lazer_off 0
 #define flame_time 30//30ms
 
+#define DEBUG //デバッグ時に記載コメントアウトする事によってifdef解除
+
 String str;
 String buff;
 
@@ -63,7 +65,7 @@ void setup()
 void loop()
 {
   int flame_start_pos=0;
-	myFile = SD.open(file_name, FILE_WRITE);
+	myFile = SD.open(file_name, FILE_READ);
   str="";//str初期化
   buff="";
   myFile = SD.open(file_name);
@@ -98,26 +100,32 @@ void loop()
         }else
         if(buff.equals(frame_end_message)){
           if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせる。
-            Serial.print("flase_repeat");
+            Serial.println("FRAME_REPEAT");
             myFile.seek(flame_start_pos);
           }else{
             flame_end=false;
           }
         }else{
-          //Serial.println(buff);
           buff=buff.trim();
           buff.remove(buff.indexOf(","), 1);
           int val = buff.toInt();
           if(x_val_count==0){
             x_val_count++;
             x_val=val;
+            analogWrite(A21, map(x_val,0,640,0,4095));
+            #ifdef DEBUG
+            Serial.print("x:");
+            Serial.println(map(x_val,0,640,0,4095));
+            #endif
           }else{
             x_val_count=0;
             y_val=val;
+            analogWrite(A22, map(y_val,0,640,0,4095));
+            #ifdef DEBUG
+            Serial.print("y:");
+            Serial.println(map(y_val,0,640,0,4095));
+            #endif
           }
-          analogWrite(A21, map(x_val,0,640,0,4095));
-          analogWrite(A22, map(y_val,0,640,0,4095));
-          //Serial.println(map(y_val,0,640,0,4095));
           while (wait_time < 3) ; // wait
           wait_time = wait_time - 3;
         }
