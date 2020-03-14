@@ -14,7 +14,7 @@
 #include <MsTimer2.h>
 File myFile;
 const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCARD
-#define file_name "movie_test.txt"//img_test.txt
+#define file_name "movie_~1.txt"//img_test.txt
 #define lazer_on_message "lazer_on,"
 #define lazer_off_message "lazer_off,"
 #define frame_start_message "frame_start,"
@@ -24,7 +24,7 @@ const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCA
 #define lazer_off 0
 #define flame_time 30//30ms
 
-#define DEBUG //デバッグ時に記載コメントアウトする事によってifdef解除
+//#define DEBUG //デバッグ時に記載コメントアウトする事によってifdef解除
 
 String str;
 String buff;
@@ -54,6 +54,7 @@ void printDirectory(File dir, int numTabs) {
       break;
     }
     for (uint8_t i = 0; i < numTabs; i++) {
+      
       Serial.print('\t');
     }
     Serial.print(entry.name());
@@ -78,6 +79,7 @@ void setup()
   Serial.print("Initializing SD card...");
   if (!SD.begin(chipSelect)) {
     Serial.println("initialization failed!");
+    delay(500);
     return;
   }
   Serial.println("initialization done.");
@@ -86,7 +88,7 @@ void setup()
   printDirectory(root,0);
   Serial.println("done!");
 
-  MsTimer2::set(30, flame_timer); //30fps...15だったら60fps
+  MsTimer2::set(15, flame_timer); //30fps...15だったら60fps
   MsTimer2::start();
 }
 
@@ -115,23 +117,33 @@ void loop()
       */
       if(buff.equals(frame_start_message)){
         flame_start_pos=myFile.position();
+        #ifdef DEBUG
         Serial.println("FRAME_START");
+        #endif
       }else
       if(buff.equals(lazer_off_message)){
+        #ifdef DEBUG
         Serial.println("LAZER_OFF");  
+        #endif
         analogWrite(lazer_output,lazer_off);        
       }else
       if(buff.equals(lazer_on_message)){
+        #ifdef DEBUG
         Serial.println("LAZER_ON");
+        #endif
         analogWrite(lazer_output,lazer_on);          
       }else
       if(buff.equals(frame_end_message)){
         if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせる。
+          #ifdef DEBUG
           Serial.println("FRAME_REPEAT");
+          #endif
           myFile.seek(flame_start_pos);
         }else{
           flame_end=false;
+          #ifdef DEBUG
           Serial.println("FRAME_END");
+          #endif
         }
       }else{
         buff=buff.trim();
