@@ -11,8 +11,8 @@ import math
 Edge_min = 100
 Edge_max = 200
 
-file_path='C:/Users/nishiharay/Videos/max_media_movie/countdown.mov'
-file_write_path = 'C:/Users/nishiharay/Desktop/NY_Laser_Project/trunk/output_txt/movie_test.txt'
+file_path='C:/Users/herom/Videos/max/bball.mov'
+file_write_path = 'C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/output_txt/movie_test2.txt'
 
 lazer_on_message='lazer_on,'
 lazer_off_message='lazer_off,'
