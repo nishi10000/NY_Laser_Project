@@ -52,7 +52,9 @@ print('Movie_time:',cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS
 #1frameに変換
 ret, frame = cap.read()
 
-
+#動画保存用変数
+#fourcc = cv2.VideoWriter_fourcc('m','p','4', 'v')
+#out = cv2.VideoWriter('output.mp4',fourcc, cap.get(cv2.CAP_PROP_FPS), (Image_Scale_X,Image_Scale_Y),True)
 
 #send_message初期化
 send_message=''
@@ -64,6 +66,8 @@ while(cap.isOpened()):
     blur=cv2.blur(scaled_img,(3,3))
     # グレースケース化
     gray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
+    #画像を反転
+    gray=cv2.flip(gray,0)
 
     #CannyにてEdge取り出し。
     edges = cv2.Canny(gray,Edge_min,Edge_max)
@@ -80,6 +84,8 @@ while(cap.isOpened()):
     #輪郭を描画
     cv2.drawContours(frame, contours, -1, (0,255,0), 1)
     
+    #動画として書き出し
+    #out.write(output)
     #'''udpの送信でFPSが落ちる。おそらくpytyon状のfor分の影響だと考えられる。
     #ポイントの数を下げる関数を考えるかｃ＋＋にするか。
     send_message=send_message+frame_start_message
@@ -108,6 +114,7 @@ while(cap.isOpened()):
 
 with open(file_write_path, mode='w') as f:
     f.write(send_message)
+
 cap.release()
 cv2.destroyAllWindows()
 

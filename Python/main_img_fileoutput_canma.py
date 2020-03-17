@@ -89,7 +89,7 @@ for i in range(len(contours)):
                 send_message=send_message+lazer_on_message
                 first_flag=2
             send_message=send_message+data+','
-send_message=send_message+frame_end_message 
+send_message = send_message + frame_end_message
 
 with open(file_write_path, mode='w') as f:
     f.write(send_message)
