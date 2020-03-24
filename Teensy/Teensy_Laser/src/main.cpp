@@ -70,7 +70,7 @@ void printDirectory(File dir, int numTabs) {
   }
 }
 
-void stop_loop(int time){
+void stop_loop(elapsedMicros time){//TODO:要確認int time->elapsedMicrosに
   while (wait_time < time) ; // wait
   wait_time = wait_time - time;
 }
@@ -158,7 +158,7 @@ void loop()
         if(x_val_count==0){
           x_val_count++;
           x_val=val;
-          analogWrite(A21, map(x_val,0,640,0,4095));
+          analogWrite(A21, map(x_val,0,480,0,4095));
           #ifdef DEBUG
           Serial.print("x:");
           Serial.println(map(x_val,0,640,0,4095));
@@ -166,7 +166,7 @@ void loop()
         }else{
           x_val_count=0;
           y_val=val;
-          analogWrite(A22, map(y_val,0,640,0,4095));
+          analogWrite(A22, map(y_val,0,480,0,4095));
           #ifdef DEBUG
           Serial.print("y:");
           Serial.println(map(y_val,0,640,0,4095));
