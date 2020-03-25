@@ -233,7 +233,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=40201",
+                "PLATFORMIO=40301",
                 "__MK66FX1M0__",
                 "TEENSY36",
                 "USB_SERIAL",

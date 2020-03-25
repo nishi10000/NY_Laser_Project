@@ -8,7 +8,7 @@
  ** CS - pin 4, pin 10 on Teensy with audio board
   
  */
- 
+#include <Arduino.h>
 #include <SD.h>
 #include <SPI.h>
 #include <MsTimer2.h>
@@ -20,7 +20,7 @@ const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCA
 #define frame_start_message "frame_start,"
 #define frame_end_message "frame_end,"
 #define lazer_output 2//pwmpin
-#define lazer_on 255
+#define lazer_on 4095
 #define lazer_off 0
 #define flame_time 30//30ms
 #define stop_time 3//(us)loop_stoptime
@@ -93,7 +93,7 @@ void setup()
   root = SD.open("/");
   printDirectory(root,0);
   Serial.println("done!");
-
+  Serial.println("setup!");
   MsTimer2::set(15, flame_timer); //30fps...15だったら60fps
   MsTimer2::start();
 }
@@ -111,6 +111,8 @@ void loop()
     root = SD.open("/");
     printDirectory(root,0);
     Serial.println("done!");
+    Serial.println("loop");
+    delay(500);
     return;
   }
   while (myFile.available()) {
@@ -161,7 +163,7 @@ void loop()
           analogWrite(A21, map(x_val,0,480,0,4095));
           #ifdef DEBUG
           Serial.print("x:");
-          Serial.println(map(x_val,0,640,0,4095));
+          Serial.println(map(x_val,0,480,0,4095));
           #endif
         }else{
           x_val_count=0;
@@ -169,7 +171,7 @@ void loop()
           analogWrite(A22, map(y_val,0,480,0,4095));
           #ifdef DEBUG
           Serial.print("y:");
-          Serial.println(map(y_val,0,640,0,4095));
+          Serial.println(map(y_val,0,480,0,4095));
           #endif
         }
       }
