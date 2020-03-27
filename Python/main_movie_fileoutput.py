@@ -11,8 +11,10 @@ import math
 Edge_min = 100
 Edge_max = 200
 
-file_path='C:/Users/herom/Videos/max/bball.mov'
-file_write_path = 'C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/output_txt/movie_test2.txt'
+delay = 1
+
+file_path='C:/Users/nishiharay/Videos/max_media_movie/bball.mov'
+file_write_path = 'C:/Users/nishiharay/Desktop/NY_Laser_Project/trunk/output_txt/movie_test2.txt'
 
 lazer_on_message='lazer_on,'
 lazer_off_message='lazer_off,'
@@ -83,7 +85,14 @@ while(cap.isOpened()):
     
     #輪郭を描画
     cv2.drawContours(frame, contours, -1, (0,255,0), 1)
-    
+    #動画を表示
+    if ret:
+        cv2.imshow("Check_Movie", output)
+        if cv2.waitKey(delay) & 0xFF == ord('q'):
+            break
+    else:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
     #動画として書き出し
     #out.write(output)
     #'''udpの送信でFPSが落ちる。おそらくpytyon状のfor分の影響だと考えられる。
