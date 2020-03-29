@@ -12,14 +12,14 @@ Edge_min = 100
 Edge_max = 200
 
 delay = 1
+#C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/test_sample_image/blading.mov
+file_path='C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/test_sample_image/blading.mov'
+file_write_path = 'C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/output_txt/movie_test4.txt'
 
-file_path='C:/Users/nishiharay/Videos/max_media_movie/bball.mov'
-file_write_path = 'C:/Users/nishiharay/Desktop/NY_Laser_Project/trunk/output_txt/movie_test2.txt'
-
-lazer_on_message='lazer_on,'
-lazer_off_message='lazer_off,'
-frame_start_message='frame_start,'
-frame_end_message='frame_end,'
+lazer_on_message='lazer_on, '
+lazer_off_message='lazer_off, '
+frame_start_message='frame_start, '
+frame_end_message='frame_end, '
 
 #画像取り込み後の最大サイズ。
 Image_Scale_X=480
@@ -86,13 +86,14 @@ while(cap.isOpened()):
     #輪郭を描画
     cv2.drawContours(frame, contours, -1, (0,255,0), 1)
     #動画を表示
+    '''
     if ret:
         cv2.imshow("Check_Movie", output)
         if cv2.waitKey(delay) & 0xFF == ord('q'):
             break
     else:
         cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-
+    #'''
     #動画として書き出し
     #out.write(output)
     #'''udpの送信でFPSが落ちる。おそらくpytyon状のfor分の影響だと考えられる。
@@ -103,7 +104,7 @@ while(cap.isOpened()):
         send_message=send_message+lazer_off_message
         for j in range(len(contours[i])):
             for k in range(len(contours[i][j])):
-                data=', '.join(map(str, contours[i][j][k]))
+                data=','.join(map(str, contours[i][j][k]))
                 msg = data #送信する文字列
                 if first_flag==1:
                     first_flag=0                    
@@ -111,7 +112,7 @@ while(cap.isOpened()):
                     send_message=send_message+lazer_on_message
                     first_flag=2
                 send_message=send_message+msg
-                send_message=send_message+','
+                send_message=send_message+', '
     send_message=send_message+frame_end_message        
                 
     #'''

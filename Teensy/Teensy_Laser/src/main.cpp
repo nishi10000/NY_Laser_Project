@@ -14,7 +14,7 @@
 #include <MsTimer2.h>
 File myFile;
 const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCARD
-#define file_name "movie_~2.txt"//img_test.txt//movie_~1.txt
+#define file_name "movie_~1.txt"//img_test.txt//movie_~1.txt
 #define lazer_on_message "lazer_on,"
 #define lazer_off_message "lazer_off,"
 #define frame_start_message "frame_start,"

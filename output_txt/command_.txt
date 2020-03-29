@@ -1,0 +1,5 @@
+cd /mnt/c/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/output_txt  
+
+sedコマンドを使用することでスペースを改行にすることができる。
+
+$ sed -e 's/\s/\n/g' ./movie_test4.txt > ./movie_test4_n.txt

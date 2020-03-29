@@ -17,10 +17,10 @@ Edge_max = 10 #読み込まれる線が1pxの幅だと100では認識しない�
 file_path='C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/test_sample_image/sample.jpg'
 file_write_path = 'C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/output_txt/img_test.txt'
 
-lazer_on_message='lazer_on,'
-lazer_off_message='lazer_off,'
-frame_start_message='frame_start,'
-frame_end_message='frame_end,'
+lazer_on_message='lazer_on, '
+lazer_off_message='lazer_off, '
+frame_start_message='frame_start, '
+frame_end_message='frame_end, '
 
 #画像取り込み後の最大サイズ。
 Image_Scale_X=480
@@ -82,13 +82,13 @@ for i in range(len(contours)):
     send_message=send_message+lazer_off_message
     for j in range(len(contours[i])):
         for k in range(len(contours[i][j])):
-            data=', '.join(map(str, contours[i][j][k]))#送信する文字列
+            data=','.join(map(str, contours[i][j][k]))#送信する文字列
             if first_flag==1:
                 first_flag=0                    
             elif first_flag==0:
                 send_message=send_message+lazer_on_message
                 first_flag=2
-            send_message=send_message+data+','
+            send_message=send_message+data+', '
 send_message = send_message + frame_end_message
 
 with open(file_write_path, mode='w') as f:
