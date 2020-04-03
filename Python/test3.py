@@ -48,9 +48,10 @@ class GUI():
 
 
     def changeText2(self):
-        fTyp = [("","*")]
+        fTyp = [("text file","*.txt")]
         iDir = os.path.abspath(os.path.dirname(__file__))
-        file = tkinter.filedialog.askopenfilename(filetypes = fTyp,initialdir = iDir)
+        #file = tkinter.filedialog.askopenfilename(filetypes = fTyp,initialdir = iDir)
+        file = tkinter.filedialog.asksaveasfilename(initialdir = iDir,filetypes = fTyp,title = "Save as",)
         self.text2.set(file) 
         my = MySingleton()   #TODO:ファイルを書き込みをファイルを指定ではなく、新規で作成できるようにする。
         my.set_write_path(file)
