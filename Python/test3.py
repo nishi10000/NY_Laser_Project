@@ -5,14 +5,7 @@ import numpy as np#MovieToTxt
 import cv2,socket,math#MovieToTxt
 
 from my_singleton import MySingleton
-
-#MovieToTxtでOpenCVを使用して動画をテキストにする。
-class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってくる必要があった。
-    def Output(self):
-        #one=Myclass()
-        my = MySingleton()
-        print(my.get_read_path())
-        print(my.get_write_path())
+from movie_to_txt import MovieToTxt
 
 class GUI():
     def __init__(self):
@@ -55,11 +48,12 @@ class GUI():
 
 
     def changeText2(self):
+        fTyp = [("","*")]
         iDir = os.path.abspath(os.path.dirname(__file__))
-        dir = tkinter.filedialog.askdirectory(initialdir = iDir)
-        self.text2.set(dir)
-        my = MySingleton()#シングルトンによって、ファイルパスを共有させる。
-        my.set_write_path(dir)
+        file = tkinter.filedialog.askopenfilename(filetypes = fTyp,initialdir = iDir)
+        self.text2.set(file) 
+        my = MySingleton()   #TODO:ファイルを書き込みをファイルを指定ではなく、新規で作成できるようにする。
+        my.set_write_path(file)
 
     def Change(self):
         m_MovieToTxt=MovieToTxt()
