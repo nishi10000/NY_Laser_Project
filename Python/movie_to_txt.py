@@ -119,7 +119,7 @@ class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってく�
 
         with open(my.get_write_path(), mode='w') as f:
             f.write(send_message)
-
+        print('Finish')
         cap.release()
         cv2.destroyAllWindows()
 

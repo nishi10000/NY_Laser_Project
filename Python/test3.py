@@ -48,12 +48,12 @@ class GUI():
 
 
     def changeText2(self):
-        fTyp = [("text file","*.txt")]
+        fTyp = [("text file","*.txt"),('Markdown', '*.md')]
         iDir = os.path.abspath(os.path.dirname(__file__))
         #file = tkinter.filedialog.askopenfilename(filetypes = fTyp,initialdir = iDir)
-        file = tkinter.filedialog.asksaveasfilename(initialdir = iDir,filetypes = fTyp,title = "Save as",)
+        file = tkinter.filedialog.asksaveasfilename(defaultextension='txt',initialdir = iDir,filetypes = fTyp,title = "Save as",)
         self.text2.set(file) 
-        my = MySingleton()   #TODO:ファイルを書き込みをファイルを指定ではなく、新規で作成できるようにする。
+        my = MySingleton()
         my.set_write_path(file)
 
     def Change(self):
