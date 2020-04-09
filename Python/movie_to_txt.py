@@ -27,11 +27,11 @@ class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってく�
         return cv2.resize(img, dsize=None, fx=scale, fy=scale)
 
     # アスペクト比を固定して、指定した大きさに収まるようリサイズする。
-    def scale_box(self,img, width, height):
+    def scale_box(self,img,width,height):
         scale = min(width / img.shape[1], height / img.shape[0])
         return cv2.resize(img, dsize=None, fx=scale, fy=scale)
     
-    def Output(self):   #アウトプットを行う。
+    def Output(self,event=None):   #アウトプットを行う。
         #one=Myclass()
         my = MySingleton()
         print(my.get_read_path())
