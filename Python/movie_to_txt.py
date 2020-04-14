@@ -93,6 +93,7 @@ class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってく�
             #out.write(output)
             #'''udpの送信でFPSが落ちる。おそらくpytyon状のfor分の影響だと考えられる。
             #ポイントの数を下げる関数を考えるかｃ＋＋にするか。
+            flame_point_count=0   #フレームのポイント数をカウントする。
             send_message=send_message+frame_start_message
             for i in range(len(contours)):
                 first_flag=1
@@ -105,14 +106,14 @@ class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってく�
                             first_flag=0                    
                         elif first_flag==0:
                             send_message=send_message+lazer_on_message
-                            first_flag=2
-                        send_message=send_message+msg
+                            first_flag = 2
+                        send_message = send_message + msg
+                        flame_point_count=flame_point_count+1
                         send_message=send_message+'\n'
             send_message=send_message+frame_end_message        
-                        
             #'''
-            #今のフレーム数を確認する。
-            print(cap.get(cv2.CAP_PROP_POS_FRAMES))
+            #今のフレーム数とポイント数を確認する。
+            print(cap.get(cv2.CAP_PROP_POS_FRAMES), flame_point_count)
             if (cap.get(cv2.CAP_PROP_POS_FRAMES)==frameconut):
             #保存するためループを抜ける。
                 break
