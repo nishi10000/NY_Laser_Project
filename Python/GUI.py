@@ -42,7 +42,7 @@ class GUI():
         fTyp = [("","*.mov"),("","*.mp4")]
         iDir = os.path.abspath(os.path.dirname(__file__))
         file = tkinter.filedialog.askopenfilename(filetypes = fTyp,initialdir = iDir)
-        self.text.set(file) 
+        self.text.set(file)
         my = MySingleton()#シングルトンによって、ファイルパスを共有させる。
         my.set_read_path(file)
 
@@ -50,16 +50,14 @@ class GUI():
     def changeText2(self):
         fTyp = [("text file","*.txt"),('Markdown', '*.md')]
         iDir = os.path.abspath(os.path.dirname(__file__))
-        #file = tkinter.filedialog.askopenfilename(filetypes = fTyp,initialdir = iDir)
         file = tkinter.filedialog.asksaveasfilename(defaultextension='txt',initialdir = iDir,filetypes = fTyp,title = "Save as",)
-        self.text2.set(file) 
+        self.text2.set(file)
         my = MySingleton()
         my.set_write_path(file)
 
     def Change(self):
         m_MovieToTxt=MovieToTxt()
         m_MovieToTxt.Output()
-             
 
 app=GUI()
 
