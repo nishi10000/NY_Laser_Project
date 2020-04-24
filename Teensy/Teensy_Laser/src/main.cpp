@@ -6,7 +6,7 @@
  ** MISO - pin 12
  ** CLK - pin 13, pin 14 on Teensy with audio board
  ** CS - pin 4, pin 10 on Teensy with audio board
-  
+  SDカードを読み込みコマンドがあれば、動作を行う。
  */
 #include <Arduino.h>
 #include <SD.h>
@@ -15,13 +15,13 @@
 File myFile;
 const int chipSelect = BUILTIN_SDCARD;// Teensy 3.5 & 3.6 on-board: BUILTIN_SDCARD
 #define file_name "movie_~1.txt"//img_test.txt//movie_~1.txt
-#define lazer_on_message "lazer_on,"
-#define lazer_off_message "lazer_off,"
+#define laser_on_message "laser_on,"
+#define laser_off_message "laser_off,"
 #define frame_start_message "frame_start,"
 #define frame_end_message "frame_end,"
-#define lazer_output 2//pwmpin
-#define lazer_on 4095
-#define lazer_off 0
+#define laser_output 2//pwmpin
+#define laser_on 4095
+#define laser_off 0
 #define flame_time 30//30ms
 #define stop_time 3//(us)loop_stoptime
 //#define DEBUG //デバッグ時に記載コメントアウトする事によってifdef解除
@@ -129,17 +129,17 @@ void loop()
         Serial.println("FRAME_START");
         #endif
       }else
-      if(buff.equals(lazer_off_message)){
+      if(buff.equals(laser_off_message)){
         #ifdef DEBUG
         Serial.println("LAZER_OFF");  
         #endif
-        analogWrite(lazer_output,lazer_off);        
+        analogWrite(laser_output,laser_off);        
       }else
-      if(buff.equals(lazer_on_message)){
+      if(buff.equals(laser_on_message)){
         #ifdef DEBUG
         Serial.println("LAZER_ON");
         #endif
-        analogWrite(lazer_output,lazer_on);          
+        analogWrite(laser_output,laser_on);          
       }else
       if(buff.equals(frame_end_message)){
         if(!flame_end){//もし時間がフレーム分経過していなかったら、読み込みのポイントをflame_start_posへシークさせる。
