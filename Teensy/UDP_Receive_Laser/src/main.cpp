@@ -18,7 +18,7 @@
     Created 2020/04/24
     By Yu Nishihara
    
-    http://url/of/online/tutorial.cc
+    https://github.com/nishi10000/NY_Laser_Project/tree/master/Teensy/UDP_Receive_Laser
 
 */
 
