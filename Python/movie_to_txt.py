@@ -13,8 +13,8 @@ Edge_min = 100
 Edge_max = 200
 
 #コマンドリスト
-lazer_on_message='lazer_on\n'
-lazer_off_message='lazer_off\n'
+laser_on_message='laser_on\n'
+laser_off_message='laser_off\n'
 frame_start_message='frame_start\n'
 frame_end_message='frame_end\n'
 
@@ -97,7 +97,7 @@ class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってく�
             send_message=send_message+frame_start_message
             for i in range(len(contours)):
                 first_flag=1
-                send_message=send_message+lazer_off_message
+                send_message=send_message+laser_off_message
                 for j in range(len(contours[i])):
                     for k in range(len(contours[i][j])):
                         data=','.join(map(str, contours[i][j][k]))
@@ -105,7 +105,7 @@ class MovieToTxt:#GUIの中で使用するには、GUIより上に持ってく�
                         if first_flag==1:
                             first_flag=0
                         elif first_flag==0:
-                            send_message=send_message+lazer_on_message
+                            send_message=send_message+laser_on_message
                             first_flag = 2
                         send_message = send_message + msg
                         flame_point_count=flame_point_count+1
