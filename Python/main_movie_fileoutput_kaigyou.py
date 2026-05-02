@@ -23,10 +23,10 @@ Edge_min = 100
 Edge_max = 200
 
 delay = 1
-#C:/Users/herom/Desktop/NY_Laser_Project/NY_Laser_Project/test_sample_image/blading.mov
-#C:/Users/nishiharay/Desktop/NY_Laser_Project/trunk/output_txt/output.txt
-file_path='C:/Users/nishiharay/Videos/max_media_movie/blading.mov'
-file_write_path = 'C:/Users/nishiharay/Desktop/NY_Laser_Project/trunk/output_txt/output.txt'
+# Example: ./test_sample_image/blading.mov
+# Example: ./output_txt/output.txt
+file_path='./input/blading.mov'
+file_write_path = './output_txt/output.txt'
 
 lazer_on_message='lazer_on\n'
 lazer_off_message='lazer_off\n'

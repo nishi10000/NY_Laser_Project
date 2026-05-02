@@ -16,7 +16,7 @@
     * pinA21 X_Galvo
 
     Created 2020/04/24
-    By Yu Nishihara
+    By Project Author
    
     https://github.com/nishi10000/NY_Laser_Project/tree/master/Teensy/UDP_Receive_Laser
 

@@ -1,0 +1,8 @@
+
+# Local editor/machine-specific settings
+Teensy/UDP_Receive_Laser/.vscode/c_cpp_properties.json
+.vs/
+**/.vs/
+**/.vscode/c_cpp_properties.json
+**/.vscode/launch.json
+.pio/
